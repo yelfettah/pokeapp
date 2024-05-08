@@ -1,0 +1,54 @@
+# Podfile
+
+# Minimum iOS sürümünü belirt
+platform :ios, '11.0'
+
+target 'Runner' do
+  use_frameworks!
+
+  # Flutter için gerekli CocoaPods paketleri
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+
+  # Örnek Flutter paketleri
+ 
+
+
+  # Diğer bağımlılıkları buraya ekleyin
+end
+# Proje yolu belirt
+
+# Ana workspace'i belirt
+workspace '/Users/mehmetfettah/flutter_apps/pokemonflutteer/ios/Runner.xcworkspace'
+
+# CocoaPods istatistiklerini devre dışı bırak
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+# Flutter kök dizinini belirleme
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+# Flutter için gerekli pod'ları yükleme
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+flutter_ios_podfile_setup
+
+# Runner için target tanımlama
+
+
+# Pod yükleme işlemi sonrası ek ayarları tanımlama
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
+end
